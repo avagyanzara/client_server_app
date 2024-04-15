@@ -181,13 +181,13 @@ void listen_socket(SOCKET socket_listen)
 
 SOCKET accept_client(struct sockaddr_storage* client_address, SOCKET socket_listen)
 {
-    socklen_t client_len = sizeof(client_address);
+    socklen_t client_len = sizeof(*client_address);
     SOCKET socket_client = accept(socket_listen, (struct sockaddr*)client_address, &client_len);
     if(CONNECTION_COUNT >= MAX_CONNECTION_COUNT) {
         const char* msg = "Unable to establist a connection.";
         send_message(socket_client, msg);
         CLOSESOCKET(socket_client);
-        return socket_client;
+        return -1;
     }
     ++CONNECTION_COUNT;
     return socket_client;    
